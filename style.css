@@ -1,0 +1,9 @@
+/* ── Slidev "Goto" dialog leak ────────────────────────────────────────
+   The built-in Goto dialog (#slidev-goto-dialog) stays mounted off-screen
+   when closed (`-top-20`), but its autocomplete list is populated with
+   every slide and overflows downward into the top-right corner.
+   Hide that list while the dialog is closed; when open it gets `.top-5`
+   and shows normally. */
+#slidev-goto-dialog:not(.top-5) .autocomplete-list {
+  display: none !important;
+}

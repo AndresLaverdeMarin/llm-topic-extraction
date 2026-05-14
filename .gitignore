@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Slidev build output
+dist/
+
+# Slidev generated / cached files
+.remote-assets/
+components.d.ts
+*.local
+
+# Export artifacts (npm run export)
+*-export.pdf
+*-export.png
+*-export/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+
+# Claude Code guidance (kept local)
+CLAUDE.md

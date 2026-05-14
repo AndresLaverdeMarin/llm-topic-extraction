@@ -1,0 +1,16 @@
+{
+  "name": "metod-workshop",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "slidev --open",
+    "build": "slidev build",
+    "export": "slidev export"
+  },
+  "dependencies": {
+    "@slidev/cli": "^51.0.0",
+    "slidev-addon-typst": "latest",
+    "slidev-theme-frankfurt": "latest",
+    "vue": "^3.5.13"
+  }
+}
