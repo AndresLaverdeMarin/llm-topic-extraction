@@ -18,5 +18,6 @@ components.d.ts
 .DS_Store
 Thumbs.db
 
-# Claude Code guidance (kept local)
+# Local-only docs (not committed)
 CLAUDE.md
+discussion.md
