@@ -366,33 +366,111 @@ section: Approach 1
 
 # Two ways to bring LLMs in
 
+<div class="flex items-center gap-3 pt-2 pb-1">
+  <span class="font-bold text-sm tracking-widest" style="color: var(--accent)">Approach 1</span>
+  <span class="text-xs opacity-60">LLM as a component, replace one box</span>
+  <div class="flex-1 h-px" style="background: var(--accent); opacity: 0.3"></div>
+</div>
+
 ```typst
 #import "@preview/fletcher:0.5.7" as fletcher: diagram, node, edge
 
+#let slate    = rgb("#e2e8f0")
+#let slateInk = rgb("#334155")
+#let indigo   = rgb("#4f46e5")
+#let teal     = rgb("#14b8a6")
+#let muted    = rgb("#64748b")
+#let subtitle = rgb(255, 255, 255, 200)
+
 #html.frame(diagram(
-  spacing: (10mm, 12mm),
-  node-stroke: 0.5pt,
-  node((-1.3,0), text(weight: "bold")[Approach 1], stroke: none),
-  node((0,0), [Documents]),
-  node((1.7,0), [LLM \ embeddings], fill: blue.lighten(80%)),
-  node((3.6,0), [BERTopic \ UMAP + HDBSCAN]),
-  node((5.4,0), [Topics]),
-  edge((0,0), (1.7,0), "->"),
-  edge((1.7,0), (3.6,0), "->"),
-  edge((3.6,0), (5.4,0), "->"),
-  node((-1.3,1), text(weight: "bold")[Approach 2], stroke: none),
-  node((0,1), [Documents]),
-  node((2.6,1), [LLM reads \ with a codebook], fill: blue.lighten(80%)),
-  node((5.4,1), [Topics]),
-  edge((0,1), (2.6,1), "->"),
-  edge((2.6,1), (5.4,1), "->"),
+  spacing: (28mm, 6mm),
+  node-stroke: none,
+  edge-stroke: 1.4pt + muted,
+  mark-scale: 80%,
+
+  node((0, 0), text(fill: slateInk, weight: 700, size: 0.95em)[Documents],
+    fill: slate, corner-radius: 7pt, inset: 11pt),
+
+  node((1, 0),
+    stack(spacing: 4pt,
+      text(fill: white, weight: 700, size: 1em)[LLM],
+      text(fill: subtitle, size: 0.78em)[embeddings],
+    ),
+    fill: indigo, corner-radius: 7pt, inset: 14pt),
+
+  node((2, 0),
+    stack(spacing: 4pt,
+      text(fill: slateInk, weight: 700, size: 0.95em)[BERTopic],
+      text(fill: muted, size: 0.78em)[UMAP · HDBSCAN · c-TF-IDF],
+    ),
+    fill: slate, corner-radius: 7pt, inset: 11pt),
+
+  node((3, 0),
+    stack(spacing: 4pt,
+      text(fill: white, weight: 700, size: 0.95em)[Topics],
+      text(fill: subtitle, size: 0.78em)[word lists],
+    ),
+    fill: teal, corner-radius: 7pt, inset: 11pt),
+
+  edge((0, 0), (1, 0), "->"),
+  edge((1, 0), (2, 0), "->"),
+  edge((2, 0), (3, 0), "->"),
 ))
 ```
 
-- **Approach 1** — replace *one box*: the embedding model. BERTopic does the rest.
-- **Approach 2** — replace *the whole pipeline*: the LLM reads and names topics itself.
+<div class="flex items-center gap-3 pt-4 pb-1">
+  <span class="font-bold text-sm tracking-widest" style="color: var(--accent-bright)">Approach 2</span>
+  <span class="text-xs opacity-60">LLM as the whole reader, replace the pipeline</span>
+  <div class="flex-1 h-px" style="background: var(--accent-bright); opacity: 0.3"></div>
+</div>
 
-We do both — starting with Approach 1.
+```typst
+#import "@preview/fletcher:0.5.7" as fletcher: diagram, node, edge
+
+#let slate        = rgb("#e2e8f0")
+#let slateInk     = rgb("#334155")
+#let indigoBright = rgb("#6366f1")
+#let teal         = rgb("#14b8a6")
+#let amber        = rgb("#fef3c7")
+#let amberInk     = rgb("#92400e")
+#let muted        = rgb("#64748b")
+#let subtitle     = rgb(255, 255, 255, 200)
+
+#html.frame(diagram(
+  spacing: (30mm, 8mm),
+  node-stroke: none,
+  edge-stroke: 1.4pt + muted,
+  mark-scale: 80%,
+
+  node((0, 0), text(fill: slateInk, weight: 700, size: 0.95em)[Documents],
+    fill: slate, corner-radius: 7pt, inset: 11pt),
+
+  node((0, 1),
+    stack(spacing: 3pt,
+      text(fill: amberInk, weight: 700, size: 0.9em)[Codebook],
+      text(fill: amberInk, size: 0.75em)[instructions / taxonomy],
+    ),
+    fill: amber, corner-radius: 7pt, inset: 9pt),
+
+  node((1, 0.5),
+    stack(spacing: 5pt,
+      text(fill: white, weight: 700, size: 1.15em)[LLM],
+      text(fill: subtitle, size: 0.82em)[reads & labels],
+    ),
+    fill: indigoBright, corner-radius: 9pt, inset: 20pt),
+
+  node((2, 0.5),
+    stack(spacing: 4pt,
+      text(fill: white, weight: 700, size: 0.95em)[Topics],
+      text(fill: subtitle, size: 0.78em)[named + described],
+    ),
+    fill: teal, corner-radius: 7pt, inset: 11pt),
+
+  edge((0, 0), (1, 0.5), "->"),
+  edge((0, 1), (1, 0.5), "->"),
+  edge((1, 0.5), (2, 0.5), "->"),
+))
+```
 
 ---
 
