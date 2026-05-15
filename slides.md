@@ -1,6 +1,6 @@
 ---
 theme: frankfurt
-title: "How to use them to extract Topics from Text"
+title: "How to use LLMs to extract Topics from Text"
 author: Andres L. Marin
 date: 2026/05/19
 infoLine: true
@@ -35,31 +35,46 @@ methods-transfer line (physics / CSS / ML, not economics).
 section: Motivation
 ---
 
-# What this workshop covers
+# What this talk covers
 
-<div class="grid grid-cols-2 gap-8 pt-2">
-<div>
-
-**The setup**
-
-1. Turning text into topics — the problem
-2. Traditional topic modelling: **BERTopic**
-
-</div>
-<div>
-
-**Two ways to bring LLMs in**
-
-3. **Approach 1** — LLM as an *embedding space* inside BERTopic
-4. **Approach 2** — *skip BERTopic*, the LLM reads end-to-end
-5. Validation · when to use what
-
-</div>
+<div class="grid grid-cols-2 gap-4 pt-4">
+  <div class="agenda-card">
+    <div class="agenda-num">1</div>
+    <div class="agenda-title">Text → topics</div>
+    <div class="agenda-sub">the measurement problem</div>
+  </div>
+  <div class="agenda-card">
+    <div class="agenda-num">2</div>
+    <div class="agenda-title">BERTopic</div>
+    <div class="agenda-sub">traditional topic modelling</div>
+  </div>
 </div>
 
-<div class="pt-6 text-lg">
+<div class="phase-bracket phase-traditional mt-2">Traditional</div>
 
-The spine: from **LLM as a component** → **LLM as the whole reader**.
+<div class="grid grid-cols-3 gap-4 pt-4">
+  <div class="agenda-card phase-llm">
+    <div class="agenda-num">3</div>
+    <div class="agenda-title">Approach 1</div>
+    <div class="agenda-sub">LLM as embedding space</div>
+  </div>
+  <div class="agenda-card phase-llm">
+    <div class="agenda-num">4</div>
+    <div class="agenda-title">Approach 2</div>
+    <div class="agenda-sub">LLM reads end-to-end</div>
+  </div>
+  <div class="agenda-card phase-llm">
+    <div class="agenda-num">5</div>
+    <div class="agenda-title">Validation</div>
+    <div class="agenda-sub">when to use what</div>
+  </div>
+</div>
+
+<div class="phase-bracket phase-llm mt-2">LLM-powered</div>
+
+<div class="pt-6 text-center text-lg">
+
+From **LLM as a component** to **LLM as the whole reader**.
 
 </div>
 
