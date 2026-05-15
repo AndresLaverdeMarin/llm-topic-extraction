@@ -7,3 +7,16 @@
 #slidev-goto-dialog:not(.top-5) .autocomplete-list {
   display: none !important;
 }
+
+/* ── Cover slide background image ─────────────────────────────────────
+   Image lives in public/ (served at root). A dark navy gradient overlay
+   keeps the title box, subtitle and workshop line readable; cover text
+   is switched to white to sit on the darkened image. */
+.slidev-layout.cover {
+  background-image:
+    linear-gradient(rgba(8, 10, 35, 0.5), rgba(8, 10, 35, 0.68)),
+    url('/cover-bg.jpeg');
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+}
