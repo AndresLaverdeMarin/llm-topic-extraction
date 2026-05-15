@@ -184,16 +184,85 @@ section: Traditional
 
 # The classic topic-modelling toolbox
 
-| Method | Idea | Output |
-|---|---|---|
-| **LDA** | documents = mixtures of latent topics; topics = word distributions | per-topic word lists |
-| **NMF** | matrix factorisation of the document–term matrix | per-topic word lists |
-| **STM** | LDA + document metadata (covariates) | topics + covariate effects |
-| **BERTopic** | embed → reduce → cluster → class-based TF-IDF | clusters + keywords |
+```typst
+#import "@preview/fletcher:0.5.7" as fletcher: diagram, node, edge
 
-<div class="pt-4 opacity-80">
+#let primary = rgb("#0f766e")
+#let bright  = rgb("#14b8a6")
+#let soft    = rgb("#f0fdfa")
+#let ink     = rgb("#0f172a")
+#let muted   = rgb("#64748b")
+#let border  = rgb("#cbd5e1")
 
-We build on **BERTopic** — because its pipeline is *modular*, and that is the opening.
+#html.frame(diagram(
+  spacing: (30mm, 6mm),
+  node-stroke: none,
+  node-fill: none,
+
+  node((0, -1.3), stack(spacing: 3pt,
+    text(fill: bright, weight: 600, size: 0.72em, tracking: 0.08em)[1999],
+    text(fill: ink, weight: 700, size: 1.05em)[NMF],
+    text(fill: muted, size: 0.72em)[matrix factorisation of \ the document–term matrix],
+  )),
+  node((1, -1.3), stack(spacing: 3pt,
+    text(fill: bright, weight: 600, size: 0.72em, tracking: 0.08em)[2003],
+    text(fill: ink, weight: 700, size: 1.05em)[LDA],
+    text(fill: muted, size: 0.72em)[documents as mixtures \ of latent topics],
+  )),
+  node((2, -1.3), stack(spacing: 3pt,
+    text(fill: bright, weight: 600, size: 0.72em, tracking: 0.08em)[2014],
+    text(fill: ink, weight: 700, size: 1.05em)[STM],
+    text(fill: muted, size: 0.72em)[LDA + document \ covariates],
+  )),
+  node((3, -1.3), stack(spacing: 3pt,
+    text(fill: bright, weight: 600, size: 0.72em, tracking: 0.08em)[2022],
+    text(fill: ink, weight: 700, size: 1.05em)[BERTopic],
+    text(fill: muted, size: 0.72em)[embed → reduce → \ cluster → keywords],
+  )),
+
+  node((0, 0), box(width: 10pt, height: 10pt, radius: 100%, fill: primary)),
+  node((1, 0), box(width: 10pt, height: 10pt, radius: 100%, fill: primary)),
+  node((2, 0), box(width: 10pt, height: 10pt, radius: 100%, fill: primary)),
+  node((3, 0), box(width: 10pt, height: 10pt, radius: 100%, fill: bright)),
+
+  edge((0, 0), (1, 0), stroke: 2pt + border),
+  edge((1, 0), (2, 0), stroke: 2pt + border),
+  edge((2, 0), (3, 0), stroke: 2pt + border),
+
+  edge((0, 0), (0, 2.2), "->", stroke: 1pt + bright),
+  edge((1, 0), (1, 2.2), "->", stroke: 1pt + bright),
+  edge((2, 0), (2, 2.2), "->", stroke: 1pt + bright),
+  edge((3, 0), (3, 2.2), "->", stroke: 1pt + bright),
+
+  node((0, 2.2),
+    text(fill: primary, size: 0.8em, weight: 600)[word lists],
+    stroke: 0.8pt + bright, fill: soft, corner-radius: 5pt, inset: 6pt),
+  node((1, 2.2),
+    text(fill: primary, size: 0.8em, weight: 600)[topic-word \ distributions],
+    stroke: 0.8pt + bright, fill: soft, corner-radius: 5pt, inset: 6pt),
+  node((2, 2.2),
+    text(fill: primary, size: 0.8em, weight: 600)[topics + \ covariate effects],
+    stroke: 0.8pt + bright, fill: soft, corner-radius: 5pt, inset: 6pt),
+  node((3, 2.2),
+    text(fill: primary, size: 0.8em, weight: 600)[clusters + \ keywords],
+    stroke: 0.8pt + bright, fill: soft, corner-radius: 5pt, inset: 6pt),
+
+  edge((-0.4, 3.5), (2.4, 3.5), stroke: 2pt + primary),
+  edge((2.6, 3.5), (3.4, 3.5), stroke: 2pt + bright),
+  node((1, 4.1), text(fill: primary, weight: 600, size: 0.72em, tracking: 0.1em)[WORD-COUNT STATISTICS]),
+  node((3, 4.1), text(fill: bright, weight: 600, size: 0.72em, tracking: 0.1em)[SEMANTIC EMBEDDINGS]),
+))
+```
+
+<div class="pt-6 text-center opacity-80">
+
+Two decades of evolution: from **word-count statistics** (NMF, LDA, STM) to **semantic embeddings** (BERTopic). The representation of text itself keeps getting richer.
+
+</div>
+
+<div class="absolute bottom-6 left-0 right-0 text-center text-xs opacity-55 px-8">
+
+Lee & Seung 1999 (*Nature*) · Blei, Ng & Jordan 2003 (*JMLR*) · Roberts et al. 2014 (*AJPS*) · Grootendorst 2022 (*arXiv*)
 
 </div>
 
