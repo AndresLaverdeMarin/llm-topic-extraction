@@ -1,3 +1,18 @@
+/* ── Design tokens ────────────────────────────────────────────────────
+   One accent (matching the theme's #3333B3 header bar) plus a brighter
+   secondary for in-content highlights, and a neutral slate palette.
+   Variables are scoped to :root so the cover-slide overrides below
+   stay intact. */
+:root {
+  --accent:        #3333B3;
+  --accent-bright: #6366f1;
+  --accent-soft:   #eef2ff;
+  --ink:           #0f172a;
+  --muted:         #64748b;
+  --surface:       #f8fafc;
+  --border:        #e2e8f0;
+}
+
 /* ── Slidev "Goto" dialog leak ────────────────────────────────────────
    The built-in Goto dialog (#slidev-goto-dialog) stays mounted off-screen
    when closed (`-top-20`), but its autocomplete list is populated with
@@ -6,6 +21,120 @@
    and shows normally. */
 #slidev-goto-dialog:not(.top-5) .autocomplete-list {
   display: none !important;
+}
+
+/* ── Body typography ──────────────────────────────────────────────────
+   Inter (loaded via the `fonts:` headmatter) with tighter leading and a
+   slate ink color for better contrast than the default near-black. */
+.slidev-layout {
+  color: var(--ink);
+  line-height: 1.55;
+  font-feature-settings: "cv11", "ss01", "ss03";
+}
+
+.slidev-layout strong { color: var(--accent); font-weight: 600; }
+.slidev-layout em     { color: var(--muted); font-style: italic; }
+.slidev-layout a {
+  color: var(--accent-bright);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, var(--accent-bright) 40%, transparent);
+}
+.slidev-layout a:hover { text-decoration-color: var(--accent-bright); }
+
+/* ── Lists: accent bullets, tighter rhythm ───────────────────────────── */
+.slidev-layout ul > li::marker { color: var(--accent-bright); }
+.slidev-layout ol > li::marker { color: var(--accent-bright); font-weight: 600; }
+.slidev-layout li { margin-block: 0.25rem; }
+
+/* ── Inline code & code blocks ────────────────────────────────────────
+   Subtle surface fill with a hairline border replaces the default flat
+   look; rounded corners and the new mono font pull it forward. */
+.slidev-layout :not(pre) > code {
+  background: var(--accent-soft);
+  color: var(--accent);
+  padding: 0.1em 0.4em;
+  border-radius: 0.3rem;
+  font-size: 0.92em;
+}
+.slidev-layout pre.shiki,
+.slidev-layout div.language-id + pre,
+.slidev-layout .slidev-code {
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+/* ── Tables: clean header, zebra rows, no full grid ──────────────────── */
+.slidev-layout table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+.slidev-layout table thead th {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  text-align: left;
+  padding: 0.55rem 0.75rem;
+  border: none;
+}
+.slidev-layout table tbody td {
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-top: 1px solid var(--border);
+}
+.slidev-layout table tbody tr:nth-child(odd) td  { background: var(--surface); }
+.slidev-layout table tbody tr:nth-child(even) td { background: #fff; }
+
+/* ── Callout cards ────────────────────────────────────────────────────
+   Replace the flat `bg-gray-100` boxes in slides.md with a modern card:
+   surface fill, a left accent stripe, soft shadow, rounded. Scoped to
+   `.slidev-layout` so it can't leak into UI chrome. */
+.slidev-layout .bg-gray-100 {
+  background: var(--surface) !important;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent-bright);
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+  padding: 0.85rem 1rem !important;
+}
+
+/* ── Top section-nav band ─────────────────────────────────────────────
+   The theme renders a solid-black top strip with a heavy black drop-
+   shadow (`<header style="background:black" class="...shadow-md shadow-black">`).
+   Recolour it to match the h1 bar's indigo so the two stack as ONE
+   continuous header band, drop the shadow, and refine the type. */
+header[style*="background:black"] {
+  background: var(--accent) !important;
+  box-shadow: none !important;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  font-weight: 500;
+  padding-top: 0.35rem !important;
+  padding-bottom: 0.35rem !important;
+}
+header[style*="background:black"] .text-white { color: #fff !important; }
+header[style*="background:black"] .text-stone {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+/* Progress dots: a touch larger and crisper than the default ●/○ glyphs. */
+header[style*="background:black"] span { letter-spacing: 0.15em; }
+
+/* ── H1 bar refinement ────────────────────────────────────────────────
+   Kill the indigo drop-shadow under the h1 (it's dated and clashes with
+   the new unified band) and tighten the title type. Cover/center/intro
+   layouts use a different h1 treatment — leave those alone. */
+.slidev-layout:not(.cover):not(.center):not(.intro) h1 {
+  box-shadow: 0 1px 0 rgba(15, 23, 42, 0.06) !important;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+  padding-top: 6rem !important;
 }
 
 /* ── Cover slide background image ─────────────────────────────────────
@@ -20,3 +149,5 @@
   background-position: center;
   color: #fff;
 }
+.slidev-layout.cover strong,
+.slidev-layout.cover a { color: #fff; }
