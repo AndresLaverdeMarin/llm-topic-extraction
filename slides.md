@@ -8,6 +8,12 @@ addons:
   - slidev-addon-typst
 transition: slide-left
 mdc: true
+fonts:
+  sans: 'Inter'
+  serif: 'Inter'
+  mono: 'JetBrains Mono'
+  weights: '300,400,500,600,700'
+  italic: false
 ---
 
 # LLMs as a reader
