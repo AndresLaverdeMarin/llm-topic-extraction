@@ -182,7 +182,7 @@ Coming from physics / computational social science / ML — not economics. A met
 section: Traditional
 ---
 
-# The classic topic-modelling toolbox
+# Topic modelling, two decades on
 
 ```typst
 #import "@preview/fletcher:0.5.7" as fletcher: diagram, node, edge
@@ -270,30 +270,70 @@ Lee & Seung 1999 (*Nature*) · Blei, Ng & Jordan 2003 (*JMLR*) · Roberts et al.
 
 # How BERTopic works
 
-BERTopic isn't one model — it's a **modular pipeline**.
+BERTopic isn't one model, it's a **modular pipeline**.
 
 ```typst
 #import "@preview/fletcher:0.5.7" as fletcher: diagram, node, edge
 
+#let slate    = rgb("#e2e8f0")
+#let slateInk = rgb("#334155")
+#let indigo   = rgb("#4f46e5")
+#let sky      = rgb("#0ea5e9")
+#let teal     = rgb("#14b8a6")
+#let violet   = rgb("#8b5cf6")
+#let emerald  = rgb("#10b981")
+#let muted    = rgb("#64748b")
+
 #html.frame(diagram(
-  spacing: (9mm, 8mm),
-  node-stroke: 0.5pt,
-  node((0,0), [Documents]),
-  node((1,0), [Embeddings], fill: yellow.lighten(60%), stroke: 1pt),
-  node((2,0), [UMAP \ reduce dims]),
-  node((3,0), [HDBSCAN \ cluster]),
-  node((4,0), [c-TF-IDF \ topic words]),
-  edge((0,0), (1,0), "->"),
-  edge((1,0), (2,0), "->"),
-  edge((2,0), (3,0), "->"),
-  edge((3,0), (4,0), "->"),
+  spacing: (22mm, 6mm),
+  node-stroke: none,
+  node-fill: white,
+  edge-stroke: 1.4pt + muted,
+  mark-scale: 80%,
+
+  node((0, 0), text(fill: white, weight: 700, size: 0.9em)[Embeddings],
+    fill: indigo, corner-radius: 7pt, inset: 10pt),
+  node((1, 0), text(fill: white, weight: 700, size: 0.9em)[Dim. \ reduction],
+    fill: sky, corner-radius: 7pt, inset: 10pt),
+  node((2, 0), text(fill: white, weight: 700, size: 0.9em)[Clustering],
+    fill: teal, corner-radius: 7pt, inset: 10pt),
+  node((3, 0), text(fill: white, weight: 700, size: 0.9em)[Tokenizer],
+    fill: violet, corner-radius: 7pt, inset: 10pt),
+  node((4, 0), text(fill: white, weight: 700, size: 0.9em)[Weighting \ scheme],
+    fill: emerald, corner-radius: 7pt, inset: 10pt),
+
+  edge((0, 0), (1, 0), "->"),
+  edge((1, 0), (2, 0), "->"),
+  edge((2, 0), (3, 0), "->"),
+  edge((3, 0), (4, 0), "->"),
 ))
 ```
 
+<div class="text-sm pt-4 space-y-1">
+
+- **Embeddings:** Turn documents into vector representations -- [docs](https://maartengr.github.io/BERTopic/getting_started/embeddings/embeddings.html)
+- **Dimensionality reduction:** Compress the embedding space (UMAP, PCA, t-SNE) -- [docs](https://maartengr.github.io/BERTopic/getting_started/dim_reduction/dim_reduction.html)
+- **Clustering:** Group similar documents (HDBSCAN, k-means, BIRCH) -- [docs](https://maartengr.github.io/BERTopic/getting_started/clustering/clustering.html)
+- **Tokenizer:** Split each cluster back into tokens for the weighting step -- [docs](https://maartengr.github.io/BERTopic/getting_started/vectorizers/vectorizers.html)
+- **Weighting scheme:** Surface the most distinctive words per cluster (c-TF-IDF, BM25) -- [docs](https://maartengr.github.io/BERTopic/getting_started/ctfidf/ctfidf.html)
+
+</div>
+
+<div class="pt-3 text-center">
+
 Every stage is swappable. Today we focus on **one stage: the embeddings**.
 
----
+</div>
 
+<div class="absolute bottom-6 left-0 right-0 text-center text-xs opacity-55 px-8">
+
+Grootendorst 2022 (*arXiv:2203.05794*) · `maartengr.github.io/BERTopic`
+
+</div>
+
+---
+hide: true
+---
 # Where traditional methods hurt
 
 <div class="grid grid-cols-2 gap-8 pt-2">
