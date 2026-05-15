@@ -141,6 +141,8 @@ Topics may be word distributions (traditional) or named labels with descriptions
 </div>
 
 ---
+hide: true
+---
 
 # A measurement problem, not a tech problem
 
