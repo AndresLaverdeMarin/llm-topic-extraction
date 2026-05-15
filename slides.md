@@ -80,30 +80,65 @@ From **LLM as a component** to **LLM as the whole reader**.
 
 ---
 
-# The problem: text is rich, but it isn't data
+# Topic modeling: from text to data
 
-Open-ended survey responses, news, interviews, social media — full of meaning, hard to analyse at scale.
+<div class="pb-3">
+
+Raw text at scale is essentially opaque, humans can't read a million documents, and standard statistics can't summarize meaning.
+
+</div>
 
 ```typst
 #import "@preview/fletcher:0.5.7" as fletcher: diagram, node, edge
 
+#let primary = rgb("#3333B3")
+#let bright  = rgb("#6366f1")
+#let soft    = rgb("#eef2ff")
+#let ink     = rgb("#0f172a")
+#let muted   = rgb("#64748b")
+#let border  = rgb("#cbd5e1")
+
 #html.frame(diagram(
-  spacing: (13mm, 7mm),
-  node-stroke: 0.5pt,
-  node((0,0), [Survey responses]),
-  node((0,1), [News articles]),
-  node((0,2), [Social media]),
-  node((2,1), text(1.3em)[?], shape: fletcher.shapes.circle,
-       fill: yellow.lighten(60%), stroke: 1pt),
-  node((4,1), [Topics & categories], fill: green.lighten(80%)),
-  edge((0,0), (2,1), "->"),
-  edge((0,1), (2,1), "->"),
-  edge((0,2), (2,1), "->"),
-  edge((2,1), (4,1), "->", label: text(0.8em)[extract]),
+  spacing: (32mm, 0mm),
+  node-stroke: 0.9pt + border,
+  node-inset: 14pt,
+  node-fill: white,
+  edge-stroke: 1.3pt + muted,
+  mark-scale: 90%,
+
+  node((0, 0),
+    stack(spacing: 9pt,
+      text(fill: bright, weight: 600, size: 0.9em, tracking: 0.08em)[CORPUS],
+      text(fill: ink, size: 1.15em)[Survey responses],
+      text(fill: ink, size: 1.15em)[Focus group transcript],
+      text(fill: ink, size: 1.15em)[News articles],
+      text(fill: ink, size: 1.15em)[Social media],
+    ),
+    stroke: 1.2pt + bright,
+    fill: soft,
+    corner-radius: 10pt,
+    inset: 20pt,
+  ),
+
+  node((1, 0), text(fill: white, weight: 600, size: 1.15em)[Topic model],
+    fill: bright, stroke: none, corner-radius: 8pt, inset: 18pt),
+
+  node((2, 0), text(fill: white, weight: 600, size: 1.15em)[Topics & categories],
+    fill: primary, stroke: none, corner-radius: 8pt, inset: 18pt),
+
+  edge((0, 0), (1, 0), "->"),
+  edge((1, 0), (2, 0), "->",
+    label: text(fill: muted, size: 0.9em)[extract]),
 ))
 ```
 
-**Topic extraction** = turning unstructured text into structured, analysable categories.
+<div class="pt-2 text-center max-w-4xl mx-auto">
+
+**Topic modeling** is the task of discovering or assigning coherent, interpretable themes (*topics*) that organize a collection of documents. 
+
+Topics may be word distributions (traditional) or named labels with descriptions (LLM-based). Either way, you get categories you can **count, compare, and reason about**.
+
+</div>
 
 ---
 
