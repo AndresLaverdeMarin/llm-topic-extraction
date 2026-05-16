@@ -547,64 +547,284 @@ Reimers & Gurevych 2019 (*Sentence-BERT: Sentence Embeddings using Siamese BERT-
 
 # Approach 1: what changes, what stays
 
-<div class="grid grid-cols-2 gap-8 pt-2">
-<div>
+<div class="pb-6">
 
-**Better embeddings help with**
-
-- short, noisy text (tweets, one-liners)
-- multilingual corpora
-- domain-specific meaning
-- semantic clusters, not keyword clusters
+LLM embeddings sharpen the **input**. Everything downstream (clustering, word lists, manual labelling) is still **classic BERTopic**.
 
 </div>
-<div>
 
-**Still your job — still traditional**
+```typst
+#import "@preview/fletcher:0.5.7" as fletcher: diagram, node, edge
 
-- tune UMAP / HDBSCAN, handle outliers
-- topics still come out as **word lists**
-- you still **read and label** them
-- the LLM improved the *representation*, not the *reading*
+#let greenBg   = rgb("#ecfdf5")
+#let greenLine = rgb("#a7f3d0")
+#let greenInk  = rgb("#065f46")
+#let greenTag  = rgb("#10b981")
 
-</div>
-</div>
+#let roseBg    = rgb("#fff1f2")
+#let roseLine  = rgb("#fecdd3")
+#let roseInk   = rgb("#9f1239")
+#let roseTag   = rgb("#f43f5e")
 
-<div class="pt-4 opacity-80">
+#let card(tagColor, bg, line, ink, tag, title, items) = block(
+  width: 105mm,
+  fill: bg,
+  stroke: 1pt + line,
+  radius: 8pt,
+  inset: (x: 12pt, y: 11pt),
+  stack(spacing: 8pt,
+    text(fill: tagColor, weight: 700, size: 8pt, tracking: 1.4pt)[#tag],
+    text(fill: ink, weight: 700, size: 12pt)[#title],
+    ..items.map(it => grid(
+      columns: (8pt, 1fr),
+      column-gutter: 5pt,
+      align: top + left,
+      text(fill: tagColor, weight: 700, size: 10pt)[•],
+      text(fill: ink, size: 10pt, it),
+    )),
+  ),
+)
 
-That last point is exactly what **Approach 2** changes.
+#html.frame(diagram(
+  spacing: (4mm, 0mm),
+  node-stroke: none,
+  node-fill: none,
+
+  node((0, 0), card(
+    greenTag, greenBg, greenLine, greenInk, [WHAT IMPROVES],
+    [Better embeddings help with],
+    (
+      [short, noisy text (tweets, one-liners)],
+      [multilingual corpora],
+      [domain-specific meaning],
+      [semantic clusters, not keyword clusters],
+    ),
+  )),
+  node((1, 0), card(
+    roseTag, roseBg, roseLine, roseInk, [STILL YOUR JOB],
+    [The rest of the pipeline is unchanged],
+    (
+      [tune UMAP / HDBSCAN, handle outliers],
+      [topics still come out as *word lists*],
+      [you still *read and label* them],
+      [the LLM upgraded the _representation_, not the _reading_],
+    ),
+  )),
+))
+```
+
+<div class="pt-4 text-center opacity-80">
+
+<span style="color: var(--accent-bright); font-weight: 700">Approach 2</span> picks up exactly there: the LLM **reads**, not just **embeds**.
 
 </div>
 
 ---
 
-# Approach 1 in practice
+# Approach 1 in practice — load the corpus
 
-Precompute LLM embeddings, hand them to a standard BERTopic pipeline:
+Datasets live on the **Hugging Face Hub**. Pandas reads them directly via the `hf://` URI scheme — no download script, no caching code.
+
+```python
+import pandas as pd
+
+splits = {"train": "train.jsonl", "test": "test.jsonl"}
+df = pd.read_json(
+    "hf://datasets/SetFit/20_newsgroups/" + splits["train"],
+    lines=True,
+)
+df.head()
+```
+
+<div class="pt-2">
+
+One line in, a tidy DataFrame out — `text`, `label`, `label_text`. The full pipeline (encode with `bge-base` → BERTopic) lives in the **companion notebook**.
+
+</div>
+
+<!--
+Walk through the notebook live; this slide is just the data-in step.
+-->
+
+<div class="absolute bottom-6 left-0 right-0 text-center text-xs opacity-55 px-8">
+
+Dataset: [`SetFit/20_newsgroups`](https://huggingface.co/datasets/SetFit/20_newsgroups) on Hugging Face · original corpus: Lang 1995 (*Newsweeder: Learning to filter netnews*, ICML)
+
+</div>
+
+---
+
+# Vanilla BERTopic — the baseline
+
+Two lines. No encoder choice, no UMAP/HDBSCAN tuning — BERTopic falls back to its built-in defaults.
 
 ```python
 from bertopic import BERTopic
-from openai import OpenAI
-client = OpenAI()
 
-# 1 — embed documents with an LLM embedding model
-def embed(docs):
-    resp = client.embeddings.create(
-        model="text-embedding-3-large", input=docs)
-    return [d.embedding for d in resp.data]
-embeddings = embed(documents)
-
-# 2 — hand them to traditional BERTopic (UMAP + HDBSCAN + c-TF-IDF)
-topic_model = BERTopic()
-topics, probs = topic_model.fit_transform(documents, embeddings=embeddings)
+topic_model = BERTopic(verbose=True)
+topics, _   = topic_model.fit_transform(docs)
+topic_model.get_topic_info().head(10)
 ```
 
-**One argument changes.** The pipeline is the same.
+<div class="grid grid-cols-2 gap-6 pt-4 text-sm">
+<div>
 
-<!--
-Show on screen: the BEV-news corpus, the topics this produced, and a
-default-embedding BERTopic run side by side.
--->
+**What you get out of the box**
+
+- encoder: `all-MiniLM-L6-v2` (22 M params, 384-d)
+- dim. reduction: UMAP, `n_neighbors=15`, `n_components=5`
+- clustering: HDBSCAN, `min_cluster_size=10`
+- representation: c-TF-IDF on the bag of words
+
+</div>
+<div>
+
+**Why this is the right baseline**
+
+- it's what every BERTopic tutorial starts with
+- every later improvement (LLM encoder, tuned HDBSCAN) is measured *against* this
+- on 20 Newsgroups: many tiny topics, ~30 % outliers — visible in the companion notebook
+
+</div>
+</div>
+
+<div class="absolute bottom-6 left-0 right-0 text-center text-xs opacity-55 px-8">
+
+Grootendorst 2022 (*arXiv:2203.05794*) · [`maartengr.github.io/BERTopic`](https://maartengr.github.io/BERTopic/)
+
+</div>
+
+---
+
+# Tuned BERTopic — step 1: a stronger encoder
+
+Swap the default MiniLM for a modern LLM-grade sentence encoder. Same API, much sharper embedding space.
+
+```python
+import torch
+from sentence_transformers import SentenceTransformer
+
+device     = "cuda" if torch.cuda.is_available() else "cpu"
+encoder    = SentenceTransformer("BAAI/bge-base-en-v1.5", device=device)
+embeddings = encoder.encode(docs, batch_size=128, convert_to_numpy=True)
+```
+
+<div class="grid grid-cols-2 gap-6 pt-3 text-sm">
+<div>
+
+**Why this encoder**
+
+- default `all-MiniLM-L6-v2` is the smallest SBERT (22 M, 384-d)
+- `bge-base-en-v1.5` — 110 M params, 768-d, modern (2023)
+- consistently strong on the MTEB leaderboard among base-sized models
+
+</div>
+<div>
+
+**GPU notes**
+
+- 8 GB VRAM is plenty for ~4 k docs at `batch_size=128`
+- ~10–15 s end-to-end on a laptop RTX 4070
+- want more quality? `bge-large-en-v1.5` (335 M, 1024-d) — same API, ~3× slower
+
+</div>
+</div>
+
+<div class="absolute bottom-6 left-0 right-0 text-center text-xs opacity-55 px-8">
+
+Xiao et al. 2023, *C-Pack: Packaged Resources to Advance General Chinese Embedding* (arXiv:2309.07597) · [MTEB leaderboard](https://huggingface.co/spaces/mteb/leaderboard)
+
+</div>
+
+---
+
+# Tuned BERTopic — step 2: tune the clustering
+
+Pass the embeddings into BERTopic with explicit UMAP and HDBSCAN — and lift `min_cluster_size` so HDBSCAN stops shattering each newsgroup.
+
+```python
+from umap import UMAP
+from hdbscan import HDBSCAN
+from bertopic import BERTopic
+
+umap_model    = UMAP(n_neighbors=15, n_components=5, min_dist=0.0,
+                     metric="cosine", random_state=42)
+
+hdbscan_model = HDBSCAN(min_cluster_size=30, min_samples=10,
+                        metric="euclidean",
+                        cluster_selection_method="eom",
+                        prediction_data=True)
+
+topic_model = BERTopic(umap_model=umap_model, hdbscan_model=hdbscan_model)
+topics, _   = topic_model.fit_transform(docs, embeddings=embeddings)
+```
+
+<div class="pt-4 text-center text-sm opacity-80">
+
+Three knobs touched. Same `fit_transform` call. Next slide: what it bought us.
+
+</div>
+
+<div class="absolute bottom-6 left-0 right-0 text-center text-xs opacity-55 px-8">
+
+[BERTopic — parameter tuning](https://maartengr.github.io/BERTopic/getting_started/parameter%20tuning/parametertuning.html) · [BERTopic FAQ — reducing outliers](https://maartengr.github.io/BERTopic/faq.html)
+
+</div>
+
+---
+
+# What changed → what it bought us
+
+Vanilla vs. tuned, on the same 4 000-doc sample of 20 Newsgroups.
+
+<div class="pt-2 text-sm">
+
+| | **Vanilla BERTopic** | **Tuned BERTopic** |
+|---|---|---|
+| **Encoder** | `all-MiniLM-L6-v2` (22 M params, 384-d) | `BAAI/bge-base-en-v1.5` (110 M params, 768-d) |
+| **`min_cluster_size`** | 10 (default) | **30** — fewer micro-clusters |
+| **`min_samples`** | tied to `min_cluster_size` (default) | **10** — set lower ⇒ fewer outliers |
+| **UMAP** | defaults | defaults (already sensible) |
+| **Topics found** | 51 | **18** — matches the 20 true classes |
+| **Outliers (HDBSCAN `-1`)** | 34 % | **10 %** |
+| **Visual** | fragmented over the true newsgroups | clusters trace the true classes |
+
+</div>
+
+<div class="pt-4 text-center text-sm opacity-80">
+
+The encoder fixes **what gets grouped together**. The HDBSCAN knobs fix **how aggressively** it groups.
+
+</div>
+
+<div class="absolute bottom-6 left-0 right-0 text-center text-xs opacity-55 px-8">
+
+Numbers from the companion notebook (`src/bertopic.ipynb`, panels **b** and **c**). Subsample: 200 docs per newsgroup × 20 newsgroups, seed 42.
+
+</div>
+
+---
+
+# Vanilla vs. tuned — visualised
+
+<div class="pt-2">
+
+<img src="./images/topic_comparison.png" alt="Three-panel comparison of 20 Newsgroups on a shared 2D UMAP: (a) ground-truth newsgroups, (b) vanilla BERTopic clusters, (c) tuned BERTopic clusters with bge-base encoder." class="w-full max-h-96 object-contain mx-auto block" />
+
+</div>
+
+<!-- <div class="pt-3 text-center text-sm opacity-80">
+
+Same 4 000 documents, same 2D UMAP layout. **Only the colouring changes**:
+panel **a** is the truth, **b** is vanilla BERTopic (fragments + grey outliers), **c** is the tuned version (coherent regions, few outliers).
+
+</div> -->
+
+<div class="absolute bottom-6 left-0 right-0 text-center text-xs opacity-55 px-8">
+
+Generated by `src/bertopic.ipynb` — shared 2D UMAP fit on `bge-base-en-v1.5` embeddings. Grey points: HDBSCAN outliers.
+
+</div>
 
 ---
 section: Approach 2
