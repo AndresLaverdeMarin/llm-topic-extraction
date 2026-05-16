@@ -524,9 +524,9 @@ Keep BERTopic. Swap its embedding model for **LLM embeddings** — everything do
 <div class="grid grid-cols-2 gap-6 pt-4 items-center">
 <div class="text-sm">
 
-**Embedding space** — a high-dimensional map of meaning, built by a transformer pretrained on massive corpora.
+**Embedding space:** High-dimensional map of meaning, built by a transformer pretrained on massive corpora.
 
-Each document becomes a vector; semantic similarity becomes geometric distance, so synonyms and paraphrases cluster together — something word-count methods could never do.
+Each document becomes a vector; semantic similarity becomes geometric distance, so synonyms and paraphrases cluster together, *something word-count methods could never do*.
 
 </div>
 <div>
