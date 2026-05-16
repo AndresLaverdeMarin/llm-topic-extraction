@@ -476,29 +476,72 @@ section: Approach 1
 
 # Approach 1: LLM as the embedding space
 
-Keep BERTopic. Swap its embedding model for **LLM embeddings**.
+Keep BERTopic. Swap its embedding model for **LLM embeddings** — everything downstream is unchanged.
 
 ```typst
 #import "@preview/fletcher:0.5.7" as fletcher: diagram, node, edge
 
+#let slate    = rgb("#e2e8f0")
+#let slateInk = rgb("#334155")
+#let indigo   = rgb("#4f46e5")
+#let sky      = rgb("#0ea5e9")
+#let teal     = rgb("#14b8a6")
+#let violet   = rgb("#8b5cf6")
+#let emerald  = rgb("#10b981")
+#let muted    = rgb("#64748b")
+#let subtitle = rgb(255, 255, 255, 200)
+
 #html.frame(diagram(
-  spacing: (8mm, 8mm),
-  node-stroke: 0.5pt,
-  node((0,0), [Documents]),
-  node((1,0), [LLM \ embeddings], fill: blue.lighten(75%), stroke: 1pt),
-  node((2,0), [UMAP \ reduce dims]),
-  node((3,0), [HDBSCAN \ cluster]),
-  node((4,0), [c-TF-IDF \ topic words]),
-  node((5,0), [Manual \ labelling], fill: red.lighten(85%)),
-  edge((0,0), (1,0), "->"),
-  edge((1,0), (2,0), "->"),
-  edge((2,0), (3,0), "->"),
-  edge((3,0), (4,0), "->"),
-  edge((4,0), (5,0), "->"),
+  spacing: (24mm, 6mm),
+  node-stroke: none,
+  node-fill: white,
+  edge-stroke: 1.4pt + muted,
+  mark-scale: 80%,
+
+  node((0, 0),
+    stack(spacing: 4pt,
+      text(fill: white, weight: 700, size: 1.05em)[Embeddings],
+      text(fill: subtitle, size: 0.78em)[LLM-powered],
+    ),
+    fill: indigo, corner-radius: 8pt, inset: 14pt),
+
+  node((1, 0), text(fill: white, weight: 700, size: 0.9em)[Dim. \ reduction],
+    fill: sky, corner-radius: 7pt, inset: 10pt),
+  node((2, 0), text(fill: white, weight: 700, size: 0.9em)[Clustering],
+    fill: teal, corner-radius: 7pt, inset: 10pt),
+  node((3, 0), text(fill: white, weight: 700, size: 0.9em)[Tokenizer],
+    fill: violet, corner-radius: 7pt, inset: 10pt),
+  node((4, 0), text(fill: white, weight: 700, size: 0.9em)[Weighting \ scheme],
+    fill: emerald, corner-radius: 7pt, inset: 10pt),
+
+  edge((0, 0), (1, 0), "->"),
+  edge((1, 0), (2, 0), "->"),
+  edge((2, 0), (3, 0), "->"),
+  edge((3, 0), (4, 0), "->"),
 ))
 ```
 
-Swap one box. Everything downstream is **unchanged, traditional BERTopic**.
+<div class="grid grid-cols-2 gap-6 pt-4 items-center">
+<div class="text-sm">
+
+**Embedding space** — a high-dimensional map of meaning, built by a transformer pretrained on massive corpora.
+
+Each document becomes a vector; semantic similarity becomes geometric distance, so synonyms and paraphrases cluster together — something word-count methods could never do.
+
+</div>
+<div>
+
+<img src="./images/embeding_space.png" alt="Embedding space visualization" class="max-h-65 exit
+ w-auto mx-auto block rounded-lg" />
+
+</div>
+</div>
+
+<div class="absolute bottom-6 left-0 right-0 text-center text-xs opacity-55 px-8">
+
+Reimers & Gurevych 2019 (*Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks*, EMNLP) — the foundation of the SBERT embeddings BERTopic uses by default.
+
+</div>
 
 ---
 
