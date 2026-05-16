@@ -759,11 +759,11 @@ topic_model = BERTopic(umap_model=umap_model, hdbscan_model=hdbscan_model)
 topics, _   = topic_model.fit_transform(docs, embeddings=embeddings)
 ```
 
-<div class="pt-4 text-center text-sm opacity-80">
+<!-- <div class="pt-4 text-center text-sm opacity-80">
 
 Three knobs touched. Same `fit_transform` call. Next slide: what it bought us.
 
-</div>
+</div> -->
 
 <div class="absolute bottom-6 left-0 right-0 text-center text-xs opacity-55 px-8">
 
