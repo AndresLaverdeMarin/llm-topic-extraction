@@ -21,3 +21,12 @@ Thumbs.db
 # Local-only docs (not committed)
 CLAUDE.md
 discussion.md
+
+# Python (uv project under src/)
+src/.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Notebook-regenerated artifacts (canonical copy lives in images/)
+src/topic_comparison.png
