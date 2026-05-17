@@ -1096,26 +1096,51 @@ Mind chunk boundaries — don't split mid-argument.
 
 # Settings that matter
 
-<div class="grid grid-cols-2 gap-8 pt-2">
-<div>
+Four knobs that turn LLM-coding from a *thing that happened* into a *method*.
 
-**Few-shot examples**
-A handful of labelled cases in the prompt anchors the codebook far better than definitions alone.
+```typst
+#import "@preview/fletcher:0.5.7" as fletcher: diagram, node
 
-**Temperature**
-Use **0** (or near-0) for coding tasks — you want consistency, not creativity.
+#let card(bg, line, accent, ink, header, title, body) = block(
+  width: 95mm,
+  fill: bg,
+  stroke: 1pt + line,
+  radius: 8pt,
+  inset: 13pt,
+  stack(spacing: 7pt,
+    text(fill: accent, weight: 700, size: 7pt, tracking: 1.4pt)[#header],
+    text(fill: ink, weight: 700, size: 12pt)[#title],
+    text(fill: ink, size: 9pt, body),
+  ),
+)
 
-</div>
-<div>
+#html.frame(diagram(
+  spacing: (5mm, 5mm),
+  node-stroke: none,
+  node-fill: none,
 
-**Model choice**
-Bigger ≠ always better; test a cheap model first, escalate only if agreement is poor.
-
-**Pin everything**
-Model name, version/date, prompt, temperature — these *are* your method.
-
-</div>
-</div>
+  node((0, 0), card(
+    rgb("#eef2ff"), rgb("#c7d2fe"), rgb("#4f46e5"), rgb("#1e1b4b"),
+    [01 · PROMPT], [Few-shot examples],
+    [A handful of labelled cases in the prompt anchors the codebook far better than definitions alone.]
+  )),
+  node((1, 0), card(
+    rgb("#f0f9ff"), rgb("#bae6fd"), rgb("#0284c7"), rgb("#0c4a6e"),
+    [02 · DECODING], [Temperature],
+    [Use 0 (or near-0) for coding tasks — you want consistency, not creativity.]
+  )),
+  node((0, 1), card(
+    rgb("#f0fdfa"), rgb("#99f6e4"), rgb("#0d9488"), rgb("#134e4a"),
+    [03 · MODEL], [Model choice],
+    [Bigger isn't always better. Test a cheap model first, escalate only if agreement is poor.]
+  )),
+  node((1, 1), card(
+    rgb("#fffbeb"), rgb("#fde68a"), rgb("#b45309"), rgb("#78350f"),
+    [04 · METHOD], [Pin everything],
+    [Model name, version/date, prompt, temperature — these *are* your method.]
+  )),
+))
+```
 
 ---
 
@@ -1210,17 +1235,53 @@ Validate it exactly as you would validate a human research assistant.
 ```typst
 #import "@preview/fletcher:0.5.7" as fletcher: diagram, node, edge
 
+#let slate        = rgb("#e2e8f0")
+#let slateInk     = rgb("#334155")
+#let indigoBright = rgb("#6366f1")
+#let teal         = rgb("#14b8a6")
+#let amber        = rgb("#fef3c7")
+#let amberInk     = rgb("#92400e")
+#let muted        = rgb("#64748b")
+#let subtitle     = rgb(255, 255, 255, 200)
+
 #html.frame(diagram(
-  spacing: (14mm, 9mm),
-  node-stroke: 0.5pt,
-  node((0,1), [Sample of \ documents]),
-  node((2,0), [Human coder \ gold standard], fill: orange.lighten(80%)),
-  node((2,2), [LLM coder], fill: blue.lighten(80%)),
-  node((4,1), [Agreement \ κ / F1 / confusion], fill: green.lighten(80%)),
-  edge((0,1), (2,0), "->"),
-  edge((0,1), (2,2), "->"),
-  edge((2,0), (4,1), "->"),
-  edge((2,2), (4,1), "->"),
+  spacing: (34mm, 11mm),
+  node-stroke: none,
+  edge-stroke: 1.4pt + muted,
+  mark-scale: 80%,
+
+  node((0, 1),
+    stack(spacing: 3pt,
+      text(fill: slateInk, weight: 700, size: 0.9em)[Sample of documents],
+      text(fill: muted, size: 0.72em)[hand-picked subset],
+    ),
+    fill: slate, corner-radius: 7pt, inset: 11pt),
+
+  node((1, 0),
+    stack(spacing: 3pt,
+      text(fill: amberInk, weight: 700, size: 0.9em)[Human coder],
+      text(fill: amberInk, size: 0.72em)[gold standard],
+    ),
+    fill: amber, corner-radius: 7pt, inset: 11pt),
+
+  node((1, 2),
+    stack(spacing: 4pt,
+      text(fill: white, weight: 700, size: 0.9em)[LLM coder],
+      text(fill: subtitle, size: 0.72em)[instrument under test],
+    ),
+    fill: indigoBright, corner-radius: 7pt, inset: 11pt),
+
+  node((2, 1),
+    stack(spacing: 4pt,
+      text(fill: white, weight: 700, size: 0.9em)[Agreement],
+      text(fill: subtitle, size: 0.72em)[κ · F1 · confusion matrix],
+    ),
+    fill: teal, corner-radius: 7pt, inset: 11pt),
+
+  edge((0, 1), (1, 0), "->"),
+  edge((0, 1), (1, 2), "->"),
+  edge((1, 0), (2, 1), "->"),
+  edge((1, 2), (2, 1), "->"),
 ))
 ```
 
