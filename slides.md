@@ -959,103 +959,105 @@ Inductive paradigm exemplified by: Wan et al. 2024, *TnT-LLM: Text Mining at Sca
 
 ---
 
-# Approach 2: skip BERTopic — the LLM reads
+# The prompt *is* your codebook
 
-No embedding space, no clustering. The LLM **reads each document** and names topics directly.
+Brief the model like a research assistant — start with the role, the task, and the codebook itself.
 
-```typst
-#import "@preview/fletcher:0.5.7" as fletcher: diagram, node, edge
+```text
+[Role]   You are coding documents about <domain>.
 
-#let slate        = rgb("#e2e8f0")
-#let slateInk     = rgb("#334155")
-#let indigoBright = rgb("#6366f1")
-#let teal         = rgb("#14b8a6")
-#let amber        = rgb("#fef3c7")
-#let amberInk     = rgb("#92400e")
-#let muted        = rgb("#64748b")
-#let subtitle     = rgb(255, 255, 255, 200)
+[Task]   Identify the topic(s) each document covers.
+         Use a topic from the list below when one fits.
+         If none of them does, propose a new one.
 
-#html.frame(diagram(
-  spacing: (30mm, 8mm),
-  node-stroke: none,
-  edge-stroke: 1.4pt + muted,
-  mark-scale: 80%,
-
-  node((0, 0), text(fill: slateInk, weight: 700, size: 0.95em)[Documents],
-    fill: slate, corner-radius: 7pt, inset: 11pt),
-
-  node((0, 1),
-    stack(spacing: 3pt,
-      text(fill: amberInk, weight: 700, size: 0.9em)[Codebook],
-      text(fill: amberInk, size: 0.75em)[instructions / taxonomy],
-    ),
-    fill: amber, corner-radius: 7pt, inset: 9pt),
-
-  node((1, 0.5),
-    stack(spacing: 5pt,
-      text(fill: white, weight: 700, size: 1.15em)[LLM],
-      text(fill: subtitle, size: 0.82em)[reads & labels],
-    ),
-    fill: indigoBright, corner-radius: 9pt, inset: 20pt),
-
-  node((2, 0.5),
-    stack(spacing: 4pt,
-      text(fill: white, weight: 700, size: 0.95em)[Topics],
-      text(fill: subtitle, size: 0.78em)[named + described],
-    ),
-    fill: teal, corner-radius: 7pt, inset: 11pt),
-
-  edge((0, 0), (1, 0.5), "->"),
-  edge((0, 1), (1, 0.5), "->"),
-  edge((1, 0.5), (2, 0.5), "->"),
-))
+[Topics so far]
+  - price_concerns: cost, affordability, value for money
+  - reliability:    breakdowns, durability, trust in the product
+  - ...
 ```
 
-Output: topics with **names and descriptions** — not word lists to decode.
+Half of a good prompt is just being **explicit about what counts as a topic**. The list isn't decoration — it *is* your measurement instrument.
 
 ---
 
-# The prompt *is* your codebook
+# Anchor it with examples and rules
 
-Write it the way you would brief a research assistant.
+Definitions drift. Examples and bounded rules are what actually pin the model's behavior.
 
 ```text
-ROLE: You are coding open-ended responses about <domain>.
+[Examples]
+  Doc: "way too expensive for a small battery"
+   → price_concerns                                       (existing)
+  Doc: "battery died in two months, warranty wouldn't cover it"
+   → warranty: claims, coverage, support after purchase   (new)
 
-TASK: Assign each response to one or more topics.
+[Rules]
+  1. topics must be GENERAL, not document-specific
+  2. each topic captures a SINGLE idea, not a combination
+  3. new topics need a short label + one-line description
+  4. if nothing relevant is covered, return "None"
 
-TOPICS (with definitions and examples):
-  - price_concerns: cost, affordability, value for money
-      e.g. "too expensive for what you get"
-  - reliability: breakdowns, durability, trust in the product
-  - ...
-
-RULES: use only the topics above; if none fit, return "other";
-       return a short supporting quote for each assignment.
+[Document]
+  {document}
 ```
 
-A good codebook prompt is **explicit, exemplified, and bounded**.
+A good prompt is **explicit, exemplified, and bounded** — and gives the model a way out when the codebook doesn't cover what's in front of it.
+
+<div class="absolute bottom-6 left-0 right-0 text-center text-xs opacity-55 px-8">
+
+Structure adapted from Pham et al. 2024, *TopicGPT*, NAACL — `generate_topic` / `assign_topics` prompt templates ([aclanthology.org/2024.naacl-long.164](https://aclanthology.org/2024.naacl-long.164/))
+
+</div>
 
 ---
 
 # Make the output structured
 
-Free text is unparseable and irreproducible. Ask for a fixed schema.
+Free text is unparseable and irreproducible. Pin a schema — every field should carry weight.
 
 ```json
 {
-  "response_id": "R0427",
+  "doc_id": "R0427",
   "topics": [
-    { "label": "price_concerns", "confidence": 0.9,
-      "quote": "way too expensive for a small battery" },
-    { "label": "reliability",    "confidence": 0.6,
-      "quote": "friend's one broke after a year" }
+    {
+      "label": "price_concerns",
+      "source_quote": "way too expensive for a small battery",
+      "clarity": 4,
+      "rationale": "explicit cost-vs-value complaint, literal mention"
+    },
+    {
+      "label": "reliability",
+      "source_quote": "friend's one broke after a year",
+      "clarity": 2,
+      "rationale": "second-hand report, no time frame given"
+    }
   ]
 }
 ```
 
-Use the model's **JSON / structured-output mode** — pin a schema, validate every record.
+Not just a label dump — a record you can **audit, validate, and aggregate** downstream.
 
+---
+
+# What makes the schema load-bearing
+
+Each field on the previous slide is there for a reason.
+
+- **Pin it with the API** — JSON mode / function calling / structured-output; *validate* every record before downstream code touches it
+- **Ground every label in a literal `source_quote`** copied from the document — auditability, and the model can't invent claims
+- **Score on a small ordinal scale** (e.g. 1–4) instead of free-form confidence — different models and temperatures actually agree
+- **Require a one-line `rationale`** in-band — improves the score and gives you debug context for free
+
+Plus: in the system message, tell the model *"respond with valid JSON only, be terse, no commentary"* — verbosity is the #1 reason structured-output pipelines fail.
+
+<div class="absolute bottom-6 left-0 right-0 text-center text-xs opacity-55 px-8">
+
+Schema pattern adapted from Riehl, Marin et al. 2026, *ARA: Agentic Reproducibility Assessment* — schema-constrained JSON grounded in literal source quotes, ordinal scoring with rationales ([arXiv:2605.02651](https://arxiv.org/abs/2605.02651))
+
+</div>
+
+---
+hide: true
 ---
 
 # Long documents: chunk, then merge
