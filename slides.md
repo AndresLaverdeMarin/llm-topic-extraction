@@ -1346,27 +1346,29 @@ Often the answer: **Approach 1 to explore, Approach 2 to read.**
 <div class="grid grid-cols-2 gap-6 pt-2 text-sm">
 <div>
 
-**Methods & frameworks**
-- Grootendorst (2022), *BERTopic* — `maartengr.github.io/BERTopic` (see *embedding models* docs)
-- Pham et al. (2024), *TopicGPT*, NAACL — `github.com/chtmp223/topicGPT`
-- Roberts, Stewart, Tingley et al. (2014), *Structural Topic Models for Open-Ended Survey Responses*, AJPS
-- Blei, Ng & Jordan (2003), *LDA*, JMLR
+**Methods used in this deck**
+- *Topic models:* Blei, Ng & Jordan (2003) *LDA*, JMLR · Roberts, Stewart, Tingley et al. (2014) *STM*, AJPS · Grootendorst (2022) *BERTopic* — [`maartengr.github.io/BERTopic`](https://maartengr.github.io/BERTopic/)
+- *Embeddings:* Reimers & Gurevych (2019) *Sentence-BERT*, EMNLP · Xiao et al. (2023) *bge / C-Pack* — [MTEB leaderboard](https://huggingface.co/spaces/mteb/leaderboard)
 
-**LLMs as annotators**
-- Gilardi et al. (2023), *ChatGPT outperforms crowd workers…*, PNAS
-- Ziems et al. (2024), *Can LLMs Transform Computational Social Science?*, Comp. Linguistics
+**LLM-driven topic extraction**
+- Wan et al. (2024) *TnT-LLM: Text Mining at Scale with LLMs* — [`arXiv:2403.12173`](https://arxiv.org/abs/2403.12173)
+- Pham et al. (2024) *TopicGPT*, NAACL — [`aclanthology.org/2024.naacl-long.164`](https://aclanthology.org/2024.naacl-long.164/) · [`github.com/chtmp223/topicGPT`](https://github.com/chtmp223/topicGPT)
+
+**Structured output as measurement**
+- Riehl, Marin et al. (2026) *ARA: Agentic Reproducibility Assessment* — [`arXiv:2605.02651`](https://arxiv.org/abs/2605.02651)
 
 </div>
 <div>
 
-**Rigour & reproducibility**
-- Egami et al., *Design-Based Semi-Supervised Learning* — valid inference from LLM labels
-- *Open-source LLMs for text annotation: a practical guide*, J. Computational Social Science (2024)
-- Spirling (2023), *Open-source generative AI for science*, Nature
-- Chen, Zaharia & Zou (2024), *How is ChatGPT's behavior changing over time?*, HDSR
+**Validation & rigour**
+- *LLMs as annotators:* Gilardi et al. (2023) *ChatGPT outperforms crowd workers…*, PNAS · Ziems et al. (2024) *Can LLMs Transform Computational Social Science?*, Comp. Linguistics
+- *Design-based inference from LLM labels:* Egami et al., *Design-Based Semi-Supervised Learning*
+- *Open-source & reproducibility:* Spirling (2023) *Open-source generative AI for science*, Nature
 
-**Companion notebook**
-- `TODO` — link to the runnable Colab / Jupyter (both approaches on the BEV-news corpus)
+**Companion materials**
+- Walkthrough notebook: `src/bertopic.ipynb` — vanilla + tuned BERTopic on 20 Newsgroups, generates the comparison panel on slide 14
+- Deck + code: [`github.com/AndresLaverdeMarin/llm-topic-extraction`](https://github.com/AndresLaverdeMarin/llm-topic-extraction)
+- Dataset: [`SetFit/20_newsgroups`](https://huggingface.co/datasets/SetFit/20_newsgroups) on Hugging Face
 
 </div>
 </div>
