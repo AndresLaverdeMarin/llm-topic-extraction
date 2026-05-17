@@ -13,6 +13,11 @@ components.d.ts
 *-export.pdf
 *-export.png
 *-export/
+# ...but keep the deck-export PDF tracked
+!slides-export.pdf
+
+# Speaker-script PDF (regenerate from narrative.md via pandoc)
+narrative.pdf
 
 # OS / editor cruft
 .DS_Store
