@@ -262,7 +262,7 @@ Two decades of evolution: from **word-count statistics** (NMF, LDA, STM) to **se
 
 <div class="absolute bottom-6 left-0 right-0 text-center text-xs opacity-55 px-8">
 
-Lee & Seung 1999 (*Nature*) · Blei, Ng & Jordan 2003 (*JMLR*) · Roberts et al. 2014 (*AJPS*) · Grootendorst 2022 (*arXiv*)
+Lee & Seung 1999, *Nature* · Blei, Ng & Jordan 2003, *JMLR* · Roberts et al. 2014, *AJPS* · Grootendorst 2022, *arXiv*
 
 </div>
 
@@ -327,7 +327,7 @@ Every stage is swappable. Today we focus on **one stage: the embeddings**.
 
 <div class="absolute bottom-6 left-0 right-0 text-center text-xs opacity-55 px-8">
 
-Grootendorst 2022 (*arXiv:2203.05794*) · `maartengr.github.io/BERTopic`
+Grootendorst 2022, *BERTopic*, [arXiv:2203.05794](https://arxiv.org/abs/2203.05794) · maartengr.github.io/BERTopic
 
 </div>
 
@@ -539,7 +539,7 @@ Each document becomes a vector; semantic similarity becomes geometric distance, 
 
 <div class="absolute bottom-6 left-0 right-0 text-center text-xs opacity-55 px-8">
 
-Reimers & Gurevych 2019 (*Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks*, EMNLP) — the foundation of the SBERT embeddings BERTopic uses by default.
+Reimers & Gurevych 2019, *Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks*, EMNLP · the foundation of the SBERT embeddings BERTopic uses by default.
 
 </div>
 
@@ -613,11 +613,11 @@ LLM embeddings sharpen the **input**. Everything downstream (clustering, word li
 ))
 ```
 
-<div class="pt-4 text-center opacity-80">
+<!-- <div class="pt-4 text-center opacity-80">
 
 <span style="color: var(--accent-bright); font-weight: 700">Approach 2</span> picks up exactly there: the LLM **reads**, not just **embeds**.
 
-</div>
+</div> -->
 
 ---
 
@@ -648,7 +648,7 @@ Walk through the notebook live; this slide is just the data-in step.
 
 <div class="absolute bottom-6 left-0 right-0 text-center text-xs opacity-55 px-8">
 
-Dataset: [`SetFit/20_newsgroups`](https://huggingface.co/datasets/SetFit/20_newsgroups) on Hugging Face · original corpus: Lang 1995 (*Newsweeder: Learning to filter netnews*, ICML)
+Dataset: [SetFit/20_newsgroups](https://huggingface.co/datasets/SetFit/20_newsgroups) on Hugging Face · original corpus: Lang 1995, *Newsweeder: Learning to filter netnews*, ICML
 
 </div>
 
@@ -690,7 +690,7 @@ topic_model.get_topic_info().head(10)
 
 <div class="absolute bottom-6 left-0 right-0 text-center text-xs opacity-55 px-8">
 
-Grootendorst 2022 (*arXiv:2203.05794*) · [`maartengr.github.io/BERTopic`](https://maartengr.github.io/BERTopic/)
+Grootendorst 2022, *BERTopic*, [arXiv:2203.05794](https://arxiv.org/abs/2203.05794) · [maartengr.github.io/BERTopic](https://maartengr.github.io/BERTopic/)
 
 </div>
 
@@ -732,7 +732,7 @@ embeddings = encoder.encode(docs, batch_size=128, convert_to_numpy=True)
 
 <div class="absolute bottom-6 left-0 right-0 text-center text-xs opacity-55 px-8">
 
-Xiao et al. 2023, *C-Pack: Packaged Resources to Advance General Chinese Embedding* (arXiv:2309.07597) · [MTEB leaderboard](https://huggingface.co/spaces/mteb/leaderboard)
+Xiao et al. 2023, *C-Pack: Packaged Resources to Advance General Chinese Embedding*, [arXiv:2309.07597](https://arxiv.org/abs/2309.07597) · [MTEB leaderboard](https://huggingface.co/spaces/mteb/leaderboard)
 
 </div>
 
@@ -747,7 +747,7 @@ from umap import UMAP
 from hdbscan import HDBSCAN
 from bertopic import BERTopic
 
-umap_model    = UMAP(n_neighbors=15, n_components=5, min_dist=0.0,
+umap_model = UMAP(n_neighbors=15, n_components=5, min_dist=0.0,
                      metric="cosine", random_state=42)
 
 hdbscan_model = HDBSCAN(min_cluster_size=30, min_samples=10,
@@ -953,7 +953,7 @@ borrowing the *idea* from TnT-LLM, not reproducing the framework.
 
 <div class="absolute bottom-6 left-0 right-0 text-center text-xs opacity-55 px-8">
 
-Inductive paradigm exemplified by: Wan et al. 2024, *TnT-LLM: Text Mining at Scale with LLMs* ([arXiv:2403.12173](https://arxiv.org/abs/2403.12173)) · Deductive: Pham et al. 2024, *TopicGPT*, NAACL([aclanthology.org/2024.naacl-long.164](https://aclanthology.org/2024.naacl-long.164/))
+Inductive: Wan et al. 2024, *TnT-LLM: Text Mining at Scale with LLMs*, [arXiv:2403.12173](https://arxiv.org/abs/2403.12173) · Deductive: Pham et al. 2024, *TopicGPT*, NAACL, [aclanthology.org/2024.naacl-long.164](https://aclanthology.org/2024.naacl-long.164/)
 
 </div>
 
@@ -976,7 +976,7 @@ Brief the model like a research assistant — start with the role, the task, and
   - ...
 ```
 
-Half of a good prompt is just being **explicit about what counts as a topic**. The list isn't decoration — it *is* your measurement instrument.
+Half of a good prompt is just being **explicit about what counts as a topic**. The list isn't decoration, it *is* your measurement instrument.
 
 ---
 
@@ -1005,7 +1005,7 @@ A good prompt is **explicit, exemplified, and bounded** — and gives the model 
 
 <div class="absolute bottom-6 left-0 right-0 text-center text-xs opacity-55 px-8">
 
-Structure adapted from Pham et al. 2024, *TopicGPT*, NAACL — `generate_topic` / `assign_topics` prompt templates ([aclanthology.org/2024.naacl-long.164](https://aclanthology.org/2024.naacl-long.164/))
+Structure adapted from Pham et al. 2024, *TopicGPT*, NAACL, [aclanthology.org/2024.naacl-long.164](https://aclanthology.org/2024.naacl-long.164/) · `generate_topic` / `assign_topics` prompt templates
 
 </div>
 
@@ -1035,7 +1035,7 @@ Free text is unparseable and irreproducible. Pin a schema — every field should
 }
 ```
 
-Not just a label dump — a record you can **audit, validate, and aggregate** downstream.
+Not just a label dump. It should be a record you can **audit, validate, and aggregate** downstream.
 
 ---
 
@@ -1044,15 +1044,15 @@ Not just a label dump — a record you can **audit, validate, and aggregate** do
 Each field on the previous slide is there for a reason.
 
 - **Pin it with the API** — JSON mode / function calling / structured-output; *validate* every record before downstream code touches it
-- **Ground every label in a literal `source_quote`** copied from the document — auditability, and the model can't invent claims
-- **Score on a small ordinal scale** (e.g. 1–4) instead of free-form confidence — different models and temperatures actually agree
-- **Require a one-line `rationale`** in-band — improves the score and gives you debug context for free
+- **Ground every label in a literal `source_quote`** copied from the document; auditability, and the model can't invent claims
+- **Score on a small scale** (e.g. high, medium, low) instead of free-form confidence; a control signal for the pipeline, and a cognitive scaffold for the model.
+- **Require a one-line `rationale`** a short free-text justification the model writes itself; improves the score and gives you debug context for free
 
 Plus: in the system message, tell the model *"respond with valid JSON only, be terse, no commentary"* — verbosity is the #1 reason structured-output pipelines fail.
 
 <div class="absolute bottom-6 left-0 right-0 text-center text-xs opacity-55 px-8">
 
-Schema pattern adapted from Riehl, Marin et al. 2026, *ARA: Agentic Reproducibility Assessment* — schema-constrained JSON grounded in literal source quotes, ordinal scoring with rationales ([arXiv:2605.02651](https://arxiv.org/abs/2605.02651))
+Schema pattern adapted from Riehl, Marin et al. 2026, *ARA: Agentic Reproducibility Assessment*, [arXiv:2605.02651](https://arxiv.org/abs/2605.02651) · schema-constrained JSON grounded in literal source quotes, ordinal scoring with rationales
 
 </div>
 
@@ -1220,7 +1220,7 @@ Four knobs that turn LLM-coding from a *thing that happened* into a *method*.
 
 <div class="absolute bottom-6 left-0 right-0 text-center text-xs opacity-55 px-8">
 
-Pham et al. 2024, *TopicGPT: A Prompt-based Topic Modeling Framework*, NAACL — [`aclanthology.org/2024.naacl-long.164`](https://aclanthology.org/2024.naacl-long.164/) · code: [`github.com/chtmp223/topicGPT`](https://github.com/chtmp223/topicGPT)
+Pham et al. 2024, *TopicGPT: A Prompt-based Topic Modeling Framework*, NAACL, [aclanthology.org/2024.naacl-long.164](https://aclanthology.org/2024.naacl-long.164/) · code: [github.com/chtmp223/topicGPT](https://github.com/chtmp223/topicGPT)
 
 </div>
 
@@ -1294,16 +1294,16 @@ Hand-code a subset, compare, report agreement — same logic as inter-rater reli
 <div class="grid grid-cols-2 gap-8 pt-2">
 <div>
 
-- **Reproducibility** — Approach 1 inherits BERTopic's; Approach 2 needs care: pin model, version, prompt, temperature
-- **Prompt sensitivity** — wording shifts results; run a robustness check
-- **Hallucinated topics** — constrain with a taxonomy; flag low confidence
+- **Reproducibility:** Approach 1 inherits BERTopic's; Approach 2 needs care: pin model, version, prompt, temperature
+- **Prompt sensitivity:** wording shifts results; run a robustness check
+- **Hallucinated topics:** constrain with a taxonomy; flag low confidence
 
 </div>
 <div>
 
-- **Systematic bias** — does coding differ across respondent subgroups?
-- **Measurement error** — topic labels used as variables → attenuation / bias downstream
-- **Cost & access** — embedding vs. per-token cost; open vs. closed models
+- **Systematic bias:** does coding differ across respondent subgroups?
+- **Measurement error:** topic labels used as variables → attenuation / bias downstream
+- **Cost & access:** embedding vs. per-token cost; open vs. closed models
 
 </div>
 </div>
@@ -1347,28 +1347,28 @@ Often the answer: **Approach 1 to explore, Approach 2 to read.**
 <div>
 
 **Methods used in this deck**
-- *Topic models:* Blei, Ng & Jordan (2003) *LDA*, JMLR · Roberts, Stewart, Tingley et al. (2014) *STM*, AJPS · Grootendorst (2022) *BERTopic* — [`maartengr.github.io/BERTopic`](https://maartengr.github.io/BERTopic/)
-- *Embeddings:* Reimers & Gurevych (2019) *Sentence-BERT*, EMNLP · Xiao et al. (2023) *bge / C-Pack* — [MTEB leaderboard](https://huggingface.co/spaces/mteb/leaderboard)
+- *Topic models:* Blei, Ng & Jordan 2003, *LDA*, JMLR · Roberts, Stewart, Tingley et al. 2014, *STM*, AJPS · Grootendorst 2022, *BERTopic* · [maartengr.github.io/BERTopic](https://maartengr.github.io/BERTopic/)
+- *Embeddings:* Reimers & Gurevych 2019, *Sentence-BERT*, EMNLP · Xiao et al. 2023, *bge / C-Pack* · [MTEB leaderboard](https://huggingface.co/spaces/mteb/leaderboard)
 
 **LLM-driven topic extraction**
-- Wan et al. (2024) *TnT-LLM: Text Mining at Scale with LLMs* — [`arXiv:2403.12173`](https://arxiv.org/abs/2403.12173)
-- Pham et al. (2024) *TopicGPT*, NAACL — [`aclanthology.org/2024.naacl-long.164`](https://aclanthology.org/2024.naacl-long.164/) · [`github.com/chtmp223/topicGPT`](https://github.com/chtmp223/topicGPT)
+- Wan et al. 2024, *TnT-LLM: Text Mining at Scale with LLMs*, [arXiv:2403.12173](https://arxiv.org/abs/2403.12173)
+- Pham et al. 2024, *TopicGPT*, NAACL, [aclanthology.org/2024.naacl-long.164](https://aclanthology.org/2024.naacl-long.164/) · [github.com/chtmp223/topicGPT](https://github.com/chtmp223/topicGPT)
 
 **Structured output as measurement**
-- Riehl, Marin et al. (2026) *ARA: Agentic Reproducibility Assessment* — [`arXiv:2605.02651`](https://arxiv.org/abs/2605.02651)
+- Riehl, Marin et al. 2026, *ARA: Agentic Reproducibility Assessment*, [arXiv:2605.02651](https://arxiv.org/abs/2605.02651)
 
 </div>
 <div>
 
 **Validation & rigour**
-- *LLMs as annotators:* Gilardi et al. (2023) *ChatGPT outperforms crowd workers…*, PNAS · Ziems et al. (2024) *Can LLMs Transform Computational Social Science?*, Comp. Linguistics
+- *LLMs as annotators:* Gilardi et al. 2023, *ChatGPT outperforms crowd workers…*, PNAS · Ziems et al. 2024, *Can LLMs Transform Computational Social Science?*, Comp. Linguistics
 - *Design-based inference from LLM labels:* Egami et al., *Design-Based Semi-Supervised Learning*
-- *Open-source & reproducibility:* Spirling (2023) *Open-source generative AI for science*, Nature
+- *Open-source & reproducibility:* Spirling 2023, *Open-source generative AI for science*, Nature
 
 **Companion materials**
 - Walkthrough notebook: `src/bertopic.ipynb` — vanilla + tuned BERTopic on 20 Newsgroups, generates the comparison panel on slide 14
-- Deck + code: [`github.com/AndresLaverdeMarin/llm-topic-extraction`](https://github.com/AndresLaverdeMarin/llm-topic-extraction)
-- Dataset: [`SetFit/20_newsgroups`](https://huggingface.co/datasets/SetFit/20_newsgroups) on Hugging Face
+- Deck + code: [github.com/AndresLaverdeMarin/llm-topic-extraction](https://github.com/AndresLaverdeMarin/llm-topic-extraction)
+- Dataset: [SetFit/20_newsgroups](https://huggingface.co/datasets/SetFit/20_newsgroups) on Hugging Face
 
 </div>
 </div>
