@@ -8,4 +8,3 @@ A companion Jupyter notebook (`src/bertopic.ipynb`) runs the BERTopic walkthroug
 
 - Deck source: [`slides.md`](slides.md) — built with [Slidev](https://sli.dev)
 - Exported deck: [`slides-export.pdf`](slides-export.pdf)
-- Speaker script: [`narrative.md`](narrative.md)
